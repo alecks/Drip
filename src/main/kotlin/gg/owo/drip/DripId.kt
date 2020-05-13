@@ -8,7 +8,7 @@ data class DripId(private val requested: NewDripId) {
     var ids: List<String> = mutableListOf()
 
     init {
-        for (username in requested.usernames) {
+        for (username in requested.origins) {
             var identifier = ""
 
             for ((index, character) in username.withIndex()) {
@@ -22,7 +22,7 @@ data class DripId(private val requested: NewDripId) {
 
             while (identifier.length < 9) identifier += (100..999).random()
 
-            ids += identifier + System.nanoTime()
+            ids = ids + (identifier + System.nanoTime())
         }
     }
 
@@ -30,7 +30,7 @@ data class DripId(private val requested: NewDripId) {
 
 // Incoming
 data class NewDripId @JsonCreator constructor(
-        val usernames: Array<String>
+        val origins: Array<String>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -38,12 +38,12 @@ data class NewDripId @JsonCreator constructor(
 
         other as NewDripId
 
-        if (!usernames.contentEquals(other.usernames)) return false
+        if (!origins.contentEquals(other.origins)) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return usernames.contentHashCode()
+        return origins.contentHashCode()
     }
 }
