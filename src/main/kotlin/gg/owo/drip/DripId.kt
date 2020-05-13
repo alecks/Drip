@@ -22,7 +22,7 @@ data class DripId(private val requested: NewDripId) {
 
             while (identifier.length < 9) identifier += (100..999).random()
 
-            ids = ids + (identifier + System.nanoTime())
+            ids += (identifier + System.nanoTime())
         }
     }
 
