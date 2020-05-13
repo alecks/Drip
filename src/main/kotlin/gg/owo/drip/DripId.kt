@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 // Outgoing
 data class DripId(private val requested: NewDripId) {
 
-    var ids: List<String> = mutableListOf()
+    var ids: Array<String> = arrayOf()
 
     init {
         for (username in requested.origins) {
@@ -22,7 +22,7 @@ data class DripId(private val requested: NewDripId) {
 
             while (identifier.length < 9) identifier += (100..999).random()
 
-            ids += (identifier + System.nanoTime())
+            ids = ids.plus(identifier + System.nanoTime())
         }
     }
 
