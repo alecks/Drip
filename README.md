@@ -15,3 +15,26 @@ This ensures that all IDs will be:
 * sortable and identifiable with ease.
 
 The first 9 digits will _always_ be the origin’s character codes and possibly some random numbers. The remainder will be a UNIX nano timestamp.
+
+## Implementation
+
+In Kotlin:
+
+```kt
+for (origin in requested.origins) {
+    var identifier = ""
+
+    for ((index, character) in origin.withIndex()) {
+        if (index > 2) break
+
+        var charCode = character.toInt().toString()
+        if (charCode.length < 3) charCode += (1..9).random()
+        else if (charCode.length > 3) charCode = charCode.substring(charCode.lastIndex - 2)
+        identifier += charCode
+    }
+
+    while (identifier.length < 9) identifier += (100..999).random()
+
+    ids = ids.plus(identifier + System.nanoTime())
+}
+```
