@@ -1,0 +1,49 @@
+package gg.owo.drip
+
+import com.fasterxml.jackson.annotation.JsonCreator
+
+// Outgoing
+data class DripId(private val requested: NewDripId) {
+
+    var ids: List<String> = mutableListOf()
+
+    init {
+        for (username in requested.usernames) {
+            var identifier = ""
+
+            for ((index, character) in username.withIndex()) {
+                if (index > 2) break
+
+                var charCode = character.toInt().toString()
+                if (charCode.length < 3) charCode += (1..9).random()
+                else if (charCode.length > 3) charCode = charCode.substring(charCode.lastIndex - 2)
+                identifier += charCode
+            }
+
+            while (identifier.length < 9) identifier += (100..999).random()
+
+            ids += identifier + System.nanoTime()
+        }
+    }
+
+}
+
+// Incoming
+data class NewDripId @JsonCreator constructor(
+        val usernames: Array<String>
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as NewDripId
+
+        if (!usernames.contentEquals(other.usernames)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return usernames.contentHashCode()
+    }
+}
