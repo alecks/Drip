@@ -8,10 +8,10 @@ data class DripId(private val requested: NewDripId) {
     var ids: Array<String> = arrayOf()
 
     init {
-        for (username in requested.origins) {
+        for (origin in requested.origins) {
             var identifier = ""
 
-            for ((index, character) in username.withIndex()) {
+            for ((index, character) in origin.withIndex()) {
                 if (index > 2) break
 
                 var charCode = character.toInt().toString()
